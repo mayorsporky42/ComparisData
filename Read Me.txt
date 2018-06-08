@@ -1,0 +1,13 @@
+File Comparison Script:
+
+- When comparing files, export the files as .txt or .csv files
+- Move .txt/.csv files into the same folder as the script
+- This script only compares 2 files at a time
+
+The output:
+
+- The program will ask you at the beginning to type the 2 documents with the respective extensions
+- You will be shown the hosts that do not have IP addresses
+- You will be shown the Hostnames that have multiple of conflicting IP addresses
+- A dictionary will be made of each file
+- A dictionary will be made of the difference between the two files. i.e. 

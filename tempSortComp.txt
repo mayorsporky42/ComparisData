@@ -1,0 +1,215 @@
+# File Comparison Script #
+# When comparing files, export the files as .txt or .csv files #
+
+# The output will be in the format of ">" for any files in first document, "<" for any files in second document #
+# The files should be sorted within the program so that the contents of the files match up by line #
+
+
+print("Please input the files you wish to compare")
+print("Example: somedata.txt - or - datasome.csv")
+print("-----------------------------------------")
+
+# user generated input of file names
+fname1 = input("First File: ")
+fname2 = input("Second File: ")
+
+
+f1 = open(fname1)
+f2 = open(fname2)
+
+
+text1 = f1.readlines()
+text2 = f2.readlines()
+
+
+# Show what files are being opened/compared
+print('\n', '...', '\n', 'files opened', '\n', '...')
+
+print('\n')
+print("-----------------------------------------")
+print("Comparing files: " " f1> " + fname1, " f2< " + fname2, sep=',')
+print("-----------------------------------------")
+
+# print(len(text1), len(text2))
+
+# Definition to get a key and value from each file
+# Will append a blank value in dictionary for any blank values
+
+
+def split2words(line):
+
+    try:
+        words = line.split('\t', 1)
+        if len(words) != 2:
+            words.append('')
+    except ValueError:
+        words = ['', '']
+    return words
+
+
+# dictionary of file 1
+
+
+dict_1 = {}
+
+for line in text1:
+    k, v = split2words(line)
+    k = k.upper()
+    dict_1.setdefault(k, [])
+
+    if k in dict_1.keys():
+        dict_1[k].extend([v.strip('\t\n')])
+    else:
+        dict_1[k] = [v]
+
+# dictionary of file 2
+
+
+dict_2 = {}
+
+for line in text2:
+    l, w = split2words(line)
+    l = l.upper()
+    dict_2.setdefault(l, [])
+
+    if l in dict_2.keys():
+        dict_2[l].extend([w.strip('\t\n')])
+    else:
+        dict_2[l] = [w]
+
+
+print('\t', '\n', '\t')
+print('\t', '#================#', '\t')
+print('\t', '\n', '\t')
+
+# ordered by hostname
+# Dict 1 printed nicely
+for k, v in sorted(dict_1.items()):
+    print(k, '\t', v)
+
+
+print('\t', '#````````````````#', '\t')
+print('\t', '#````````````````#', '\t')
+print('\t', '#````````````````#', '\t')
+
+
+# Dict 2 printed nicely
+for l, w in sorted(dict_2.items()):
+    print(l, '\t', w)
+
+# prints both dictionaries then the length of each
+# print(dict_1, '\n', dict_2)
+print('\n\t', 'Lines in file 1: ', len(dict_1)-1, '\n\t', 'Lines in file 2: ', len(dict_2)-1)
+
+# for k, v in dict_1:
+#     if v == '':
+#         print('Hosts without IPs: ', k, '\t', v)
+# for l, w in dict_2:
+#     if w == '':
+#         print('Hosts without IPs: ', l, '\t', w)
+
+
+print('\t', '#````````````````````````````````````````#', '\t')
+
+f1 = open(fname1)
+f2 = open(fname2)
+
+f1_line = f1.readline()
+f2_line = f2.readline()
+
+line_no = 1
+
+for k, v in dict_1:
+    for l, w in dict_2:
+        while k != '' or l != '':
+            if v != w:
+
+                if w == '' and v != '':
+                    print("f1>+", "Line %d" % line_no, k, v, '\t', l, w)
+
+                elif v != '':
+                    print("f1>", "Line %d" % line_no, k, v, '\t', l, w)
+
+                if v == '' and w != '':
+                    print("f2<+", "Line %d" % line_no, l, w, '\t', k, v)
+
+                elif w != '':
+                    print("f2<", "Line %d" % line_no, l, w, '\t', k, v)
+
+                print()
+    f1_line = f1.readline()
+    f2_line = f2.readline()
+
+    line_no += 1
+
+# # Compares the lines in the file - (dictionary)
+#
+# while f1_line != '' or f2_line != '':
+#     f1_line = f1_line.strip()
+#     f2_line = f2_line.strip()
+#
+#     if f1_line != f2_line:
+#
+#         # if a line does not exist in file 2 then mark the output with a +
+#         if f2_line == '' and f1_line != '':
+#             print("f1>+", "Line %d" % line_no, f1_line, '\t', f2_line)
+#
+#         # otherwise output the line in file 1 then mark with >
+#         elif f1_line != '':
+#             print ("f1>", "Line %d" % line_no, f1_line, '\t', f2_line)
+#
+#         # if a line does not exist in file 1 then mark the output with a +
+#         if f1_line == '' and f2_line != '':
+#             print ("f2<+", "Line %d" % line_no, f2_line, '\t', f1_line)
+#
+#         # otherwise output the line in file 2 and mark with <
+#         elif f2_line != '':
+#             print("f2<", "Line %d" % line_no, f2_line, '\t', f1_line)
+#
+#         # print a blank line
+#         print()
+#
+#     # read the next line
+#     f1_line = f1.readline()
+#     f2_line = f2.readline()
+#
+#     # increment line count
+#     line_no += 1
+
+# =========================================================== #
+
+# class difflib.HtmlDiff
+# __init__(tabsize=2, wrapcolumn=None, linejunk=None, charjunk=IS_CHARACTER_JUNK)
+#
+# make_file(fromlines, tolines, fromdesc='hostname', todesc='IP', context=False, numlines=5, *, charset='utf-8')
+
+# =========================================================== #
+
+#  line_no = 1
+#
+# filecmp.cmp(f1,f2, shallow=True)
+
+# =========================================================== #
+
+# =========================================================== #
+
+# with open(f1, r) as file1:
+#     with open(f2, r) as file2:
+#         same = set(file1).intersection(file2)
+#
+# same.discard('\n')
+#
+# with open('some_output_file.txt', 'w') as file_out:
+#     for line in same:
+#         file_out.write(line)
+
+
+# Makes a new file in the folder with a name given by the user #
+# print('\n', "~~ Please input a valid destination file name below ~~", '\n\t')
+# fname3 = input("Destination file: ")
+# with open(fname3, "a+") as f:
+#     f.write("comparison")
+# print("Comparison Destination: " + fname3)
+
+f1.close()
+f2.close()
